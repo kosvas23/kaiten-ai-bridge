@@ -1,0 +1,16 @@
+.git
+.gitignore
+.pytest_cache
+.ruff_cache
+.venv
+__pycache__
+*.py[cod]
+*.sqlite3
+*.sqlite3-*
+.env
+data
+logs
+tmp
+tests
+docs
+deploy

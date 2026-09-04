@@ -1,0 +1,36 @@
+services:
+  bridge:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: kaiten-ai-bridge:local
+    restart: unless-stopped
+    init: true
+    env_file:
+      - .env
+    # Linux host networking keeps 127.0.0.1 valid for nginx and the corporate AI
+    # running on the same Ubuntu host. Revisit this after the production network
+    # topology (host service versus shared container network) is chosen.
+    network_mode: host
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    tmpfs:
+      - /tmp:size=64m,mode=1777
+    volumes:
+      - bridge-data:/app/data
+      - bridge-logs:/app/logs
+      - bridge-tmp:/app/tmp
+    stop_grace_period: 30s
+    logging:
+      driver: local
+      options:
+        max-size: 10m
+        max-file: "3"
+
+volumes:
+  bridge-data:
+  bridge-logs:
+  bridge-tmp:
